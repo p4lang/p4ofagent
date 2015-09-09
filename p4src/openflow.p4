@@ -7,6 +7,9 @@
 #define OPENFLOW_ENABLE_VLAN
 #define OPENFLOW_ENABLE_L3
 
+/* enables fabric header for non-switch.p4 targets */
+//#define OPENFLOW_PACKET_IN_OUT 
+
 header_type openflow_metadata_t {
     fields {
         index : 32;
@@ -22,7 +25,7 @@ metadata openflow_metadata_t openflow_metadata;
     #define CPU_PORT_ID 64
 #endif
 
-#if 0
+#ifdef OPENFLOW_PACKET_IN_OUT
 #define ETHERTYPE_BF_FABRIC 0x9000
 
 #define TRUE 1
@@ -84,8 +87,7 @@ action terminate_cpu_packet() {
     remove_header(fabric_header_cpu);
     remove_header(fabric_payload_header);
 }
-#endif
-
+#endif /* OPENFLOW_PACKET_IN_OUT */
 
 /****************************************************************
  * Actions common to all openflow tables, sets a bitmap indicating
