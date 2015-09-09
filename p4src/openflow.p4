@@ -157,9 +157,8 @@ action ofpat_group_egress_update(bmap) {
 
 table ofpat_group_egress {
     reads {
-        openflow_metadata.index : exact;
         openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        standard_metadata.egress_port : exact;
     }
 
     actions {
@@ -202,8 +201,8 @@ action ofpat_output(ifindex) {
 
 table ofpat_output {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
         standard_metadata.egress_spec : ternary;
     }
 
@@ -224,9 +223,9 @@ action ofpat_set_mpls_ttl(ttl) {
 
 table ofpat_set_mpls_ttl {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -245,9 +244,9 @@ action ofpat_dec_mpls_ttl() {
 
 table ofpat_dec_mpls_ttl {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -267,9 +266,9 @@ action ofpat_push_mpls() {
 
 table ofpat_push_mpls {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -288,9 +287,9 @@ action ofpat_pop_mpls() {
 
 table ofpat_pop_mpls {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -312,9 +311,9 @@ action ofpat_push_vlan() {
 
 table ofpat_push_vlan {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -334,9 +333,9 @@ action ofpat_pop_vlan() {
 
 table ofpat_pop_vlan {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
     
     actions {
@@ -355,9 +354,9 @@ action ofpat_set_vlan_vid(vid) {
 
 table ofpat_set_field {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -386,9 +385,9 @@ action ofpat_set_nw_ttl_ipv4(ttl) {
 
 table ofpat_set_nw_ttl_ipv4 {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -407,9 +406,9 @@ action ofpat_set_nw_ttl_ipv6(ttl) {
 
 table ofpat_set_nw_ttl_ipv6 {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -428,9 +427,9 @@ action ofpat_dec_nw_ttl_ipv4() {
 
 table ofpat_dec_nw_ttl_ipv4 {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
@@ -449,9 +448,9 @@ action ofpat_dec_nw_ttl_ipv6(ttl) {
 
 table ofpat_dec_nw_ttl_ipv6 {
     reads {
-        openflow_metadata.index : exact;
-        openflow_metadata.group_id : exact;
-        standard_metadata.egress_spec : ternary;
+        openflow_metadata.index : ternary;
+        openflow_metadata.group_id : ternary;
+        standard_metadata.egress_port : ternary;
     }
 
     actions {
