@@ -1,0 +1,21 @@
+create libp4ofagent.a
+addlib libp4ofagent.a
+addlib build/gcc-local/lib/OFStateManager.a
+addlib build/gcc-local/lib/indigo.a
+addlib build/gcc-local/lib/OFConnectionManager.a
+addlib build/gcc-local/lib/debug_counter.a
+addlib build/gcc-local/lib/cjson.a
+addlib build/gcc-local/lib/BigList.a
+addlib build/gcc-local/lib/BigHash.a
+addlib build/gcc-local/lib/minimatch.a
+addlib build/gcc-local/lib/slot_allocator.a
+addlib build/gcc-local/lib/Configuration.a
+addlib build/gcc-local/lib/BigRing.a
+addlib build/gcc-local/lib/SocketManager.a
+addlib build/gcc-local/lib/loci.a
+addlib build/gcc-local/lib/timer_wheel.a
+addlib build/gcc-local/lib/OS.a
+addlib build/gcc-local/lib/AIM.a 
+addlib libp4ofagent.a
+save
+end
