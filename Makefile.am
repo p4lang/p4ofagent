@@ -25,6 +25,8 @@ src/p4ofagent.c                    \
 src/parse.c                        \
 src/state.c
 
-p4ofagent : all
+indigo-lib:
 	make -f indigo-lib.mk indigo-lib
+
+p4ofagent: indigo-lib all 
 	ar -M <libp4ofagent.mri
