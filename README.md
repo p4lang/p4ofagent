@@ -5,7 +5,7 @@ To build, run
 
 `git submodule update --init --recursive`
 
-`autoreconf -fi`
+`./autogen.sh`
 
 `./configure`
 
