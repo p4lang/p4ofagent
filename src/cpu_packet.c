@@ -18,12 +18,14 @@ cpu_packet_swap_header(cpu_header_t *hdr, bool flag) {
         hdr->w.w2 = ntohs(hdr->w.w2);
         hdr->w.w3 = ntohs(hdr->w.w3);
         hdr->w.w4 = ntohs(hdr->w.w4);
-        hdr->w.w6 = ntohl(hdr->w.w6);
+        hdr->w.w6 = ntohs(hdr->w.w6);
+        hdr->w.w7 = ntohs(hdr->w.w7);
     } else {
         hdr->w.w2 = htons(hdr->w.w2);
         hdr->w.w3 = htons(hdr->w.w3);
         hdr->w.w4 = htons(hdr->w.w4);
-        hdr->w.w6 = htonl(hdr->w.w6);
+        hdr->w.w6 = htons(hdr->w.w6);
+        hdr->w.w7 = htons(hdr->w.w7);
     }
 }
 

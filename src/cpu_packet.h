@@ -18,25 +18,26 @@ typedef struct __attribute__((__packed__)) cpu_header_ {
     union {
         struct __attribute__((__packed__)) {
             /* Fabric header */
-            uint8_t packetType : 3;
+            uint8_t packetType    : 3;
             uint8_t headerVersion : 2;
             uint8_t packetVersion : 2;
-            uint8_t pad1 : 1;
+            uint8_t pad1          : 1;
 
             uint8_t fabricColor : 3;
-            uint8_t fabricQos : 5;
+            uint8_t fabricQos   : 5;
 
-            uint8_t dstDevice : 8;
+            uint8_t  dstDevice      : 8;
             uint16_t dstPortOrGroup : 16;
 
             uint16_t ingressIfindex : 16;
-            uint16_t ingressBd : 16;
+            uint16_t ingressBd      : 16;
 
             /* CPU header */
-            uint8_t egressQueue : 5;
-            uint8_t txBypass : 1;
-            uint8_t reserved : 2;
-            uint32_t reasonCode : 16;
+            uint8_t  egressQueue : 5;
+            uint8_t  txBypass    : 1;
+            uint8_t  reserved    : 2;
+            uint16_t ingressPort : 16;
+            uint16_t reasonCode  : 16;
 
             /* Fabric payload header */
             uint16_t etherType : 16;
@@ -48,7 +49,8 @@ typedef struct __attribute__((__packed__)) cpu_header_ {
             uint16_t w3;
             uint16_t w4;
             uint8_t w5;
-            uint32_t w6;
+            uint16_t w6;
+            uint16_t w7;
         } w;
     };
 } cpu_header_t;

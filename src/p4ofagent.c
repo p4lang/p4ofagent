@@ -41,13 +41,13 @@ void packet_in_handler (int fd, void *unused, int rr, int wr, int err) {
 
     of_packet_in_buffer_id_set (packet_in, -1);
     of_packet_in_total_len_set (packet_in, ret - sizeof(cpu));
-    of_packet_in_reason_set (packet_in, cpu.d.reasonCode); 
-    of_packet_in_table_id_set (packet_in, cpu.d.reserved); 
+    of_packet_in_reason_set (packet_in, cpu.d.reasonCode >> 8); 
+    of_packet_in_table_id_set (packet_in, (uint8_t) cpu.d.reasonCode); 
     of_packet_in_cookie_set (packet_in, 0);
 
     // struct ofp_match fields
     match.version = OF_VERSION_1_3;
-    match.fields.in_port = cpu.d.ingressIfindex;
+    match.fields.in_port = cpu.d.ingressPort;
     match.masks.in_port = 0xffffffff;
     if (of_packet_in_match_set (packet_in, &match)) {
         P4_LOG ("Error setting match");
