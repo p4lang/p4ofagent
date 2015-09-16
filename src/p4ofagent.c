@@ -47,7 +47,7 @@ void packet_in_handler (int fd, void *unused, int rr, int wr, int err) {
 
     // struct ofp_match fields
     match.version = OF_VERSION_1_3;
-    match.fields.in_port = cpu.d.ingressPort;
+    match.fields.in_port = cpu.d.ingressIfindex;
     match.masks.in_port = 0xffffffff;
     if (of_packet_in_match_set (packet_in, &match)) {
         P4_LOG ("Error setting match");
