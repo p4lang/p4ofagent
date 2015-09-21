@@ -32,7 +32,6 @@ limitations under the License.
 void packet_in_handler (int fd, void *unused, int rr, int wr, int err) {
     static unsigned char in_buf[2000];
     static unsigned char out_buf[2000];
-    of_match_t match;
 
     int ret;
     of_packet_in_t *packet_in;
@@ -62,6 +61,8 @@ void packet_in_handler (int fd, void *unused, int rr, int wr, int err) {
     of_packet_in_cookie_set (packet_in, 0);
 
     // struct ofp_match fields
+    of_match_t match;
+    memset (&match, 0, sizeof (match));
     match.version = OF_VERSION_1_3;
     match.fields.in_port = cpu.d.ingressPort;
     match.masks.in_port = 0xffffffff;
