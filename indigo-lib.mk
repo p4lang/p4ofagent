@@ -16,6 +16,8 @@
 THIS_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 LIB_DIR := $(THIS_DIR)/build/gcc-local/lib
 
+DEBUG := 1
+
 MODULE := indigo
 MODULE_BASEDIR := $(THIS_DIR)/submodules/indigo
 include $(MODULE_BASEDIR)/init.mk
