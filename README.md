@@ -107,7 +107,7 @@ written for use with the Ryu opensource openflow controller. To run it:
 This builds the executable with openflow agent. The mininet script looks for 
 this executable, so it needs to be built before running the mininet script.
 
-3. In another terminal, start Ryu like this: ryu-manager <path to file>/
+3. In another terminal, start Ryu like this: ryu-manager
 [simple_switch_13.py](https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_13.py)
 
 This starts an instance of Ryu running a controller program for a single-table L2 switch.
