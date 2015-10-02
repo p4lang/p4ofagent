@@ -98,22 +98,6 @@ the behavioral model. Then you're done! Whew!
 
 To play with a live example, see the
 [mininet script](https://github.com/p4lang/p4factory/blob/master/mininet/openflow_l2.py)
-written for use with the Ryu opensource openflow controller. To run it:
-
-1. Go to the switch target directory ($(P4FACTORY)/targets/switch)
-
-2. Run "make bm-p4ofagent PLUGIN_OPENFLOW=1
-
-This builds the executable with openflow agent. The mininet script looks for 
-this executable, so it needs to be built before running the mininet script.
-
-3. In another terminal, start Ryu like this: ryu-manager <path to file>/
-[simple_switch_13.py](https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_13.py)
-
-This starts an instance of Ryu running a controller program for a single-table L2 switch.
-
-4. Start the mininet script. The IPv4 address of the Ryu instance needs to be 
-supplied as an argument to the script. The agent will try to connect to a 
-controller at this IP address.
-
-5. Ping between hosts h1 and h2 to test connectivity
+written for use with the Ryu opensource openflow controller. To run it, build the switch
+target with the Openflow Agent, then start a Ryu instance running the [simple_switch_13](https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_13.py)
+app in another window. 
