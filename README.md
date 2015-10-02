@@ -1,5 +1,27 @@
 # P4 Openflow Agent
 This is the controller-facing layer of a P4 agnostic Openflow 1.3 Agent.
+
+    +-----------------------------------+
+    |      Openflow Controller          | 
+    |                                   |
+    +-----------------------------------+
+                     ^
+                     |
+                     |
+                     v
+    +-----------------------------------+
+    |          Openflow Agent           |
+    |                                   |
+    |-----------------------------------|
+    |      Openflow <-> P4 Mapping      |
+    +-----------------------------------+
+    |        Resource Mgmt. API         |
+    |   (auto-gen. from p4 program)     |
+    +-----------------------------------+
+    |          Soft Switch              |
+    |    (compiled from p4 program)     |
+    +-----------------------------------+
+
 ## Building
 To build, run
 
@@ -43,3 +65,21 @@ When adding Openflow to a target, you must write a mapping file that tells the b
 
 #### Final steps
 Edit the target Makefile to build and link this library, then add a call to `p4ofagent_init` (defined in `p4ofagent.c`) to the `main.c` that is starting the behavioral model. This will start the P4 Openflow Agent as a thread in the behavioral model. Then you're done! Whew!
+
+#### Example Ryu Controller App Integration
+
+Here are the steps to set up a topology of two hosts h1 and h2 connected to a soft switch which is controlled by a Ryu controller App (simple_switch_13.py)
+
+1. Go to the switch target directory ($(P4FACTORY)/targets/switch)
+
+2. Run "make bm-p4ofagent PLUGIN_OPENFLOW=1
+
+This builds the executable with openflow agent. The mininet script looks for this executable, so it needs to be built before running the mininet script.
+
+3. In another terminal, start Ryu like this: ryu-manager <path to file>/[simple_switch_13.py](https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_13.py)
+
+This starts an instance of Ryu running a controller program for a single-table L2 switch.
+
+4. Start the mininet script. The IPv4 address of the Ryu instance needs to be supplied as an argument to the script. The agent will try to connect to a controller at this IP address.
+
+5. Ping between hosts h1 and h2 to test connectivity
