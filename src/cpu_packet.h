@@ -45,14 +45,15 @@ typedef struct __attribute__((__packed__)) cpu_header_ {
             uint8_t  dstDevice      : 8;
             uint16_t dstPortOrGroup : 16;
 
-            uint16_t ingressIfindex : 16;
-            uint16_t ingressBd      : 16;
-
             /* CPU header */
             uint8_t  egressQueue : 5;
             uint8_t  txBypass    : 1;
             uint8_t  reserved    : 2;
-            uint16_t ingressPort : 16;
+
+            uint16_t ingressPort    : 16;
+            uint16_t ingressIfindex : 16;
+            uint16_t ingressBd      : 16;
+
             uint16_t reasonCode  : 16;
 
             /* Fabric payload header */
@@ -62,9 +63,9 @@ typedef struct __attribute__((__packed__)) cpu_header_ {
             uint8_t  w0;
             uint16_t w1;
             uint16_t w2;
-            uint16_t w3;
+            uint8_t w3;
             uint16_t w4;
-            uint8_t w5;
+            uint16_t w5;
             uint16_t w6;
             uint16_t w7;
         } w;

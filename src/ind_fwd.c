@@ -70,19 +70,19 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
             switch (*(uint32_t *) arg) {
                 case OFPP_FLOOD:
                 case OFPP_ALL:
-                    cpu.w.w5 = MULTICAST;
+                    cpu.d.reasonCode = MULTICAST;
                     cpu.d.dstPortOrGroup = AGENT_ETHERNET_FLOOD_MC_HDL;
                     break;
                 case OFPP_IN_PORT:
-                    cpu.w.w5 = UNICAST;
+                    cpu.d.reasonCode = UNICAST;
                     cpu.d.dstPortOrGroup = in_port;
                     break;
                 case OFPP_TABLE:
-                    cpu.w.w5 = UNICAST;
+                    cpu.d.reasonCode = UNICAST;
                     cpu.d.dstPortOrGroup = 0;
                     break;
                 default:
-                    cpu.w.w5 = UNICAST;
+                    cpu.d.reasonCode = UNICAST;
                     cpu.d.dstPortOrGroup = *(uint32_t *) arg;
             }
         } else {
