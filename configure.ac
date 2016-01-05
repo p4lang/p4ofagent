@@ -16,6 +16,8 @@ AC_PROG_RANLIB
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h stdint.h stdlib.h sys/ioctl.h sys/socket.h unistd.h])
 
+AC_CHECK_LIB([rt], [clock_gettime], [], [AC_MSG_ERROR([Cannot find librt])])
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
 AC_TYPE_UINT16_T

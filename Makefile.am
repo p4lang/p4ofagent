@@ -10,6 +10,8 @@ libp4ofagent_a_CFLAGS += -Isubmodules/indigo/modules/SocketManager/module/inc
 libp4ofagent_a_CFLAGS += -Isubmodules/indigo/modules/OFStateManager/module/inc
 libp4ofagent_a_CFLAGS += -I/usr/include/libnl3
 
+libp4ofagent_a_CFLAGS += -lrt
+
 libp4ofagent_a_SOURCES =           \
 inc/p4ofagent/callbacks.h          \
 inc/p4ofagent/openflow-spec1.3.0.h \
