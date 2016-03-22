@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 #include "cpu_packet.h"
-#include "p4ofagent/p4ofagent.h"
+#include <p4ofagent/p4ofagent.h>
 
 static int cpu_sock_fd;
 static int cpu_ifindex;

@@ -19,8 +19,8 @@ limitations under the License.
 
 #include <stdint.h>
 
-#include "indigo/indigo.h"
-#include "indigo/fi.h"
+#include <indigo/indigo.h>
+#include <indigo/fi.h>
 
 #define MH_OFFSET 48
 #define OXMTLV_HEADER_LEN 4

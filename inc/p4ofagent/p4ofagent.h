@@ -18,7 +18,6 @@ limitations under the License.
 #define _P4OFAGENT_H_
 
 #include <stdbool.h>
-#include "p4_sim/pre.h"
 
 /* Memory allocation */
 #define P4OFAGENT_MALLOC malloc
@@ -35,12 +34,18 @@ limitations under the License.
 #define TRUE  1
 #define FALSE 0
 
+/* Header changes for bmv2 */
+#ifdef _BMV2_
+#include <pd/pd_pre.h>
+p4_pd_entry_hdl_t AGENT_ETHERNET_FLOOD_MC_HDL;
+#else
+#include <p4_sim/pre.h>
+mc_mgrp_hdl_t AGENT_ETHERNET_FLOOD_MC_HDL;
+#endif // _BMV2_
+
 /* Session IDs for transactional state changes */
 p4_pd_sess_hdl_t P4_PD_SESSION;
 p4_pd_sess_hdl_t P4_PRE_SESSION;
-
-/* Common multicast ID for flooding */
-mc_mgrp_hdl_t AGENT_ETHERNET_FLOOD_MC_HDL;
 
 /* Entry point for the program. Starts the Indigo select/accept
  * loop in a seperate thread. 'ipv6' indicates whether the

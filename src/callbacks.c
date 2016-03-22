@@ -18,14 +18,22 @@ limitations under the License.
  * Table callbacks
  */
 
-#include <stdlib.h>
 #include "state.h"
-#include "p4ofagent/p4ofagent.h"
-#include "p4ofagent/parse.h"
-#include "p4ofagent/callbacks.h"
-#include "p4ofagent/openflow-spec1.3.0.h"
-#include "p4_sim/pd.h"
-#include "p4_sim/openflow.h"
+
+#include <stdlib.h>
+
+#include <p4ofagent/p4ofagent.h>
+#include <p4ofagent/parse.h>
+#include <p4ofagent/callbacks.h>
+#include <p4ofagent/openflow-spec1.3.0.h>
+
+#ifdef _BMV2_
+#include <pd/pd.h>
+#include <plugin/of/inc/openflow.h>
+#else
+#include <p4_sim/pd.h>
+#include <p4_sim/openflow.h>
+#endif // _BMV2_
 
 /**************
  * Signatures *

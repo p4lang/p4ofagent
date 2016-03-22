@@ -19,11 +19,17 @@ limitations under the License.
  */
 
 #include "state.h"
-#include "p4ofagent/callbacks.h"
-#include "p4ofagent/parse.h"
-#include "p4ofagent/p4ofagent.h"
-#include "p4ofagent/openflow-spec1.3.0.h"
-#include "p4_sim/pd_wrappers.h"
+
+#include <p4ofagent/callbacks.h>
+#include <p4ofagent/parse.h>
+#include <p4ofagent/p4ofagent.h>
+#include <p4ofagent/openflow-spec1.3.0.h>
+
+#ifdef _BMV2_
+#include <plugin/of/inc/pd_wrappers.h>
+#else
+#include <p4_sim/pd_wrappers.h>
+#endif // _BMV2_
 
 void
 parse_ofpat (of_action_t *action, uint16_t *type,
