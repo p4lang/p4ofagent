@@ -36,7 +36,7 @@ limitations under the License.
 
 /* Header changes for bmv2 */
 #ifdef _BMV2_
-#include <pd/pd_pre.h>
+#include <bm/pdfixed/pd_pre.h>
 p4_pd_entry_hdl_t AGENT_ETHERNET_FLOOD_MC_HDL;
 #else
 #include <p4_sim/pre.h>

@@ -28,7 +28,7 @@ limitations under the License.
 
 #ifdef _BMV2_
 #include <pd/pd.h>
-#include <pd/pd_pre.h>
+#include <bm/pdfixed/pd_pre.h>
 #else
 #include <p4_sim/pd.h>
 #include <p4_sim/pre.h>
