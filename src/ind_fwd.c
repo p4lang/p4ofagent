@@ -25,12 +25,6 @@ limitations under the License.
 #include <p4ofagent/openflow-spec1.3.0.h>
 #include <indigo/forwarding.h>
 
-#ifdef _BMV2_
-#include "plugin/of/inc/pd_wrappers.h"
-#else
-#include "p4_sim/pd_wrappers.h"
-#endif // _BMV2_
-
 indigo_error_t
 indigo_fwd_forwarding_features_get (of_features_reply_t *fr) {
     of_features_reply_n_buffers_set (fr, 0);

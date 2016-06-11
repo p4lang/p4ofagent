@@ -25,12 +25,6 @@ limitations under the License.
 #include <p4ofagent/p4ofagent.h>
 #include <p4ofagent/openflow-spec1.3.0.h>
 
-#ifdef _BMV2_
-#include <plugin/of/inc/pd_wrappers.h>
-#else
-#include <p4_sim/pd_wrappers.h>
-#endif // _BMV2_
-
 void
 parse_ofpat (of_action_t *action, uint16_t *type,
              uint8_t **arg, uint8_t *hdr_field) {

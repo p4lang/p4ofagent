@@ -21,7 +21,7 @@ limitations under the License.
 #include "state.h"
 
 #ifdef _BMV2_
-#include <plugin/of/inc/pd_wrappers.h>
+//#include <plugin/of/inc/pd_wrappers.h>
 #else
 #include <p4_sim/pd_wrappers.h>
 #endif

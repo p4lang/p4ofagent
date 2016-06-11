@@ -27,7 +27,7 @@ limitations under the License.
 #include <loci/loci.h>
 
 #ifdef _BMV2_
-#include <pd/pd.h>
+#include <p4ofagent/plugin.h>
 #include <bm/pdfixed/pd_pre.h>
 #else
 #include <p4_sim/pd.h>

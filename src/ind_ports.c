@@ -23,12 +23,6 @@ limitations under the License.
 #include <indigo/fi.h>
 #include <indigo/port_manager.h>
 
-#ifdef _BMV2_
-#include <plugin/of/inc/pd_wrappers.h>
-#else
-#include <p4_sim/pd_wrappers.h>
-#endif // _BMV2_
-
 indigo_error_t
 indigo_port_features_get (of_features_reply_t *fr) {
     of_wire_buffer_u8_set (fr->wbuf, 16, 0);

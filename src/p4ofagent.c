@@ -32,12 +32,10 @@ limitations under the License.
 #include <loci/loci_classes.h>
 
 #ifdef _BMV2_
-#include <plugin/of/inc/pd_wrappers.h>
-#define P4_PD_PREFIX p4_pd_
+#include <bm/pdfixed/pd_static.h>
 #else
-#include <p4_sim/pd_wrappers.h>
-#define P4_PD_PREFIX
-#endif // _BMV2_
+#include <p4_sim/pd_static.h>
+#endif
 
 void packet_in_handler (int fd, void *unused, int rr, int wr, int err) {
     static unsigned char in_buf[2000];
@@ -200,7 +198,11 @@ void p4ofagent_init (bool ipv6, char *ctl_ip) {
     }
 #endif // _BMV2_
 
+#ifdef _BMV2_
+    if  (p4_pd_client_init (&P4_PD_SESSION)) {
+#else
     if  (p4_pd_client_init (&P4_PD_SESSION, 5)) {
+#endif
         P4_LOG ("Could not start PD session for openflow\n");
     }
 

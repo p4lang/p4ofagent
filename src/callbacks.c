@@ -28,8 +28,7 @@ limitations under the License.
 #include <p4ofagent/openflow-spec1.3.0.h>
 
 #ifdef _BMV2_
-#include <pd/pd.h>
-#include <plugin/of/inc/openflow.h>
+#include <p4ofagent/plugin.h>
 #else
 #include <p4_sim/pd.h>
 #include <p4_sim/openflow.h>
