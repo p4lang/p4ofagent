@@ -1,5 +1,7 @@
 lib_LIBRARIES = libp4ofagent.a
 
+SUBDIRS = inc
+
 libp4ofagent_a_CFLAGS = -I$(srcdir)/inc
 libp4ofagent_a_CFLAGS += -I inc
 libp4ofagent_a_CFLAGS += -Isubmodules/indigo/modules/indigo/module/inc
@@ -33,26 +35,6 @@ src/parse.c                        \
 src/state.c                        
 
 libp4ofagent_a_SOURCES = $(p4ofagent_headers) $(p4ofagent_sources)
-
-# extra includes from indigo
-of_cxn_manager_inc = inc/OFConnectionManager/ofconnectionmanager.h
-of_state_manager_inc = inc/OFStateManager/ofstatemanager.h
-of_socket_manager_inc = inc/SocketManager/socketmanager.h
-loci_inc = inc/loci/loci.h
-indigo_inc = \
-inc/indigo/indigo.h \
-inc/indigo/error.h  \
-inc/indigo/fi.h     \
-inc/indigo/types.h  \
-inc/indigo/port_manager.h
-
-nobase_include_HEADERS = \
-$(p4ofagent_includes)    \
-$(of_cxn_manager_inc)    \
-$(of_state_manager_inc)  \
-$(of_socket_manager_inc) \
-$(loci_inc)              \
-$(indigo_inc)            
 
 indigo-lib:
 	make -f indigo-lib.mk indigo-lib
