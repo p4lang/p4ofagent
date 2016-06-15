@@ -36,6 +36,8 @@ src/state.c
 
 libp4ofagent_a_SOURCES = $(p4ofagent_headers) $(p4ofagent_sources)
 
+nobase_include_HEADERS = dependmodules.x
+
 indigo-lib:
 	make -f indigo-lib.mk indigo-lib
 	find submodules -name inc -exec sh -c "cp -r {}/* inc" \;
