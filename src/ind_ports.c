@@ -18,11 +18,10 @@ limitations under the License.
  * Implementation of some OF logic. This file is equired by IVS.
  */
 
-#include "indigo/error.h"
-#include "indigo/types.h"
-#include "indigo/fi.h"
-#include "indigo/port_manager.h"
-#include "p4_sim/pd_wrappers.h"
+#include <indigo/error.h>
+#include <indigo/types.h>
+#include <indigo/fi.h>
+#include <indigo/port_manager.h>
 
 indigo_error_t
 indigo_port_features_get (of_features_reply_t *fr) {

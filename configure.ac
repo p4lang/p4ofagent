@@ -29,7 +29,7 @@ AC_TYPE_UINT8_T
 AC_CHECK_FUNCS([memset socket])
 
 # Generate makefiles
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile inc/Makefile])
 
 AC_OUTPUT
 

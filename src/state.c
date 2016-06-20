@@ -19,7 +19,6 @@ limitations under the License.
  */
 
 #include "state.h"
-#include "p4_sim/pd_wrappers.h"
 
 static Pvoid_t flow_id_to_entry_hdl = (Pvoid_t) NULL;
 static Pvoid_t flow_id_to_table_id  = (Pvoid_t) NULL;

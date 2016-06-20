@@ -22,10 +22,18 @@ limitations under the License.
  */
 
 #include <Judy.h>
-#include "p4ofagent/openflow-spec1.3.0.h"
-#include "p4_sim/pd.h"
-#include "p4_sim/pre.h"
-#include "loci/loci.h"
+#include <p4ofagent/openflow-spec1.3.0.h>
+
+#include <loci/loci.h>
+
+#ifdef _BMV2_
+#include <p4ofagent/plugin.h>
+#include <bm/pdfixed/pd_pre.h>
+#else
+#include <p4_sim/pd.h>
+#include <p4_sim/pre.h>
+#endif // _BMV2_
+
 
 /**********************************************************************
  * Typedefs for wrapper functions. Arguments go as follows:

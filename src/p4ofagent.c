@@ -18,16 +18,24 @@ limitations under the License.
  * Agent initialization and Packet In logic.
  */ 
 
-#include <pthread.h>
 #include "cpu_packet.h"
 #include "state.h"
-#include "p4ofagent/p4ofagent.h"
-#include "p4ofagent/openflow-spec1.3.0.h"
-#include "p4_sim/pd_wrappers.h"
-#include "OFConnectionManager/ofconnectionmanager.h"
-#include "OFStateManager/ofstatemanager.h"
-#include "SocketManager/socketmanager.h"
-#include "loci/loci_classes.h"
+
+#include <pthread.h>
+
+#include <p4ofagent/p4ofagent.h>
+#include <p4ofagent/openflow-spec1.3.0.h>
+
+#include <OFConnectionManager/ofconnectionmanager.h>
+#include <OFStateManager/ofstatemanager.h>
+#include <SocketManager/socketmanager.h>
+#include <loci/loci_classes.h>
+
+#ifdef _BMV2_
+#include <bm/pdfixed/pd_static.h>
+#else
+#include <p4_sim/pd_static.h>
+#endif
 
 void packet_in_handler (int fd, void *unused, int rr, int wr, int err) {
     static unsigned char in_buf[2000];
@@ -180,11 +188,21 @@ void p4ofagent_init (bool ipv6, char *ctl_ip) {
         exit(1);
     }
 
+#ifdef _BMV2_
+    if (p4_pd_mc_create_session(&P4_PRE_SESSION)) {
+        P4_LOG ("Could not start PRE session for openflow\n");
+    }
+#else
     if (mc_create_session(&P4_PRE_SESSION)) {
         P4_LOG ("Could not start PRE session for openflow\n");
     }
+#endif // _BMV2_
 
+#ifdef _BMV2_
+    if  (p4_pd_client_init (&P4_PD_SESSION)) {
+#else
     if  (p4_pd_client_init (&P4_PD_SESSION, 5)) {
+#endif
         P4_LOG ("Could not start PD session for openflow\n");
     }
 

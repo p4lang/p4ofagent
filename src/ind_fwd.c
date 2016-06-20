@@ -20,11 +20,10 @@ limitations under the License.
  */
 
 #include "cpu_packet.h"
-#include "p4ofagent/parse.h"
-#include "p4ofagent/p4ofagent.h"
-#include "p4ofagent/openflow-spec1.3.0.h"
-#include "p4_sim/pd_wrappers.h"
-#include "indigo/forwarding.h" 
+#include <p4ofagent/parse.h>
+#include <p4ofagent/p4ofagent.h>
+#include <p4ofagent/openflow-spec1.3.0.h>
+#include <indigo/forwarding.h>
 
 indigo_error_t
 indigo_fwd_forwarding_features_get (of_features_reply_t *fr) {
