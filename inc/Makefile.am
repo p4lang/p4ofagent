@@ -44,7 +44,6 @@ indigo/of_state_manager.h      \
 indigo/of_connection_manager.h \
 indigo/forwarding.h
 
-
 aim_inc = \
 AIM/aim.h            \
 AIM/aim_config.h     \
