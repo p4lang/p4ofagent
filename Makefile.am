@@ -2,17 +2,18 @@ lib_LIBRARIES = libp4ofagent.a
 
 SUBDIRS = inc
 
-libp4ofagent_a_CFLAGS = -I$(srcdir)/inc
-libp4ofagent_a_CFLAGS += -I inc
-libp4ofagent_a_CFLAGS += -Isubmodules/indigo/modules/indigo/module/inc
-libp4ofagent_a_CFLAGS += -Isubmodules/indigo/submodules/loxigen-artifacts/loci/inc
-libp4ofagent_a_CFLAGS += -Isubmodules/indigo/submodules/infra/modules/AIM/module/inc
-libp4ofagent_a_CFLAGS += -Isubmodules/indigo/modules/OFConnectionManager/module/inc
-libp4ofagent_a_CFLAGS += -Isubmodules/indigo/modules/SocketManager/module/inc
-libp4ofagent_a_CFLAGS += -Isubmodules/indigo/modules/OFStateManager/module/inc
-libp4ofagent_a_CFLAGS += -I/usr/include/libnl3
+AM_CPPFLAGS = -I$(srcdir)/inc
+AM_CPPFLAGS += -I inc
+AM_CPPFLAGS += -Isubmodules/indigo/modules/indigo/module/inc
+AM_CPPFLAGS += -Isubmodules/indigo/submodules/loxigen-artifacts/loci/inc
+AM_CPPFLAGS += -Isubmodules/indigo/submodules/infra/modules/AIM/module/inc
+AM_CPPFLAGS += -Isubmodules/indigo/modules/OFConnectionManager/module/inc
+AM_CPPFLAGS += -Isubmodules/indigo/modules/SocketManager/module/inc
+AM_CPPFLAGS += -Isubmodules/indigo/modules/OFStateManager/module/inc
+AM_CPPFLAGS += -I/usr/include/libnl3
 
-libp4ofagent_a_CFLAGS += -lrt
+AM_CPPFLAGS += -lrt
+AM_CPPFLAGS += -fPIC
 
 p4ofagent_includes = \
 inc/p4ofagent/callbacks.h          \
