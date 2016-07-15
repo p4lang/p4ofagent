@@ -29,19 +29,39 @@ int cpu_packet_ifindex_get () {
 }
 
 void
-cpu_packet_swap_header(cpu_header_t *hdr, bool flag) {
-    if (flag) {
-        hdr->w.w2 = ntohs(hdr->w.w2);
-        hdr->w.w4 = ntohs(hdr->w.w4);
-        hdr->w.w5 = ntohs(hdr->w.w5);
-        hdr->w.w6 = ntohs(hdr->w.w6);
-        hdr->w.w7 = ntohs(hdr->w.w7);
+cpu_packet_swap_fabric(fabric_header_t *fabric_header, bool network_to_host) {
+    if (network_to_host) {
+        fabric_header->w.w3 = ntohs(fabric_header->w.w3);
     } else {
-        hdr->w.w2 = htons(hdr->w.w2);
-        hdr->w.w4 = htons(hdr->w.w4);
-        hdr->w.w5 = htons(hdr->w.w5);
-        hdr->w.w6 = htons(hdr->w.w6);
-        hdr->w.w7 = htons(hdr->w.w7);
+        fabric_header->w.w3 = htons(fabric_header->w.w3);
+    }
+}
+
+void
+cpu_packet_swap_multicast(fabric_header_multicast_t *multicast_header, bool network_to_host) {
+    if (network_to_host) {
+        multicast_header->w.w1 = ntohs(multicast_header->w.w1);
+        multicast_header->w.w2 = ntohs(multicast_header->w.w2);
+        multicast_header->w.w3 = ntohs(multicast_header->w.w3);
+    } else {
+        multicast_header->w.w1 = htons(multicast_header->w.w1);
+        multicast_header->w.w2 = htons(multicast_header->w.w2);
+        multicast_header->w.w3 = htons(multicast_header->w.w3);
+    }
+}
+
+void
+cpu_packet_swap_cpu(fabric_header_cpu_t *cpu_header, bool network_to_host) {
+    if (network_to_host) {
+        cpu_header->w.w1 = ntohs(cpu_header->w.w1);
+        cpu_header->w.w2 = ntohs(cpu_header->w.w2);
+        cpu_header->w.w3 = ntohs(cpu_header->w.w3);
+        cpu_header->w.w4 = ntohs(cpu_header->w.w4);
+    } else {
+        cpu_header->w.w1 = htons(cpu_header->w.w1);
+        cpu_header->w.w2 = htons(cpu_header->w.w2);
+        cpu_header->w.w3 = htons(cpu_header->w.w3);
+        cpu_header->w.w4 = htons(cpu_header->w.w4);
     }
 }
 

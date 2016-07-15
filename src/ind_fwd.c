@@ -33,8 +33,7 @@ indigo_fwd_forwarding_features_get (of_features_reply_t *fr) {
     return INDIGO_ERROR_NONE;
 }
 
-#define UNICAST 1
-#define MULTICAST 2
+// PACKET_OUT only supports 1 action right now, OUTPUT
 
 indigo_error_t
 indigo_fwd_packet_out (of_packet_out_t *packet_out) {
@@ -49,71 +48,77 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
 
     of_list_action_t *actions;
     of_action_t elt;
-    int rv, num_actions = 0;
+    int rv;
 
-    // get packet original in port
-    of_packet_out_in_port_get(packet_out, &in_port);
+    // fabric header setup
+    fabric_header_t fabric_header;
+    memset (&fabric_header, 0, sizeof (fabric_header));
+    fabric_header.w.w0 = 0xa0;
 
-    // cpu header setup
-    cpu_header_t cpu;
-    memset (&cpu, 0, sizeof (cpu));
-    cpu.w.w0 = 0xa0;
-    cpu.d.etherType = *(uint16_t *) (data.data + 12);
+    // only used for OFPP_ALL/OFPP_FLOOD
+    fabric_header_multicast_t multicast_header;
+    memset (&multicast_header, 0, sizeof(multicast_header));
+
+    // only used for OFPP_IN_PORT/unicasting
+    fabric_header_cpu_t cpu_header;
+
+    // just an ethertype at the moment
+    fabric_payload_header_t payload_header;
+    memset (&payload_header, 0, sizeof(payload_header));
+    payload_header.d.etherType = *(uint16_t *) (data.data + 12);
+
+    // Init output buffer, copy mac header and fabric ethertype
+    int cursor = 12;
+    static char out_buf[2000];
+    memset (out_buf, 0, sizeof (out_buf));
+    memcpy (out_buf, data.data, 12);
+    *(out_buf + cursor) = 0x90;
+    cursor += 2;
 
     actions = of_packet_out_actions_get(packet_out);
 
     OF_LIST_ACTION_ITER (actions, &elt, rv) {
         parse_ofpat (&elt, &type, &arg, &hdr_field);
-
         if (type == OFPAT_OUTPUT) {
             switch (*(uint32_t *) arg) {
                 case OFPP_FLOOD:
                 case OFPP_ALL:
-                    cpu.d.reasonCode = MULTICAST;
-                    cpu.d.dstPortOrGroup = AGENT_ETHERNET_FLOOD_MC_HDL;
+                    of_packet_out_in_port_get (packet_out, &in_port);
+                    multicast_header.d.ingressIfindex = in_port;
+                    multicast_header.d.mcastGrp = AGENT_ETHERNET_FLOOD_MC_HDL;
+                    cpu_packet_swap_multicast (&multicast_header, FALSE);
+                    cpu_packet_swap_fabric (&fabric_header, FALSE);
+                    memcpy (out_buf + cursor, (void *) &fabric_header, sizeof (fabric_header));
+                    cursor += sizeof (fabric_header);
+                    memcpy (out_buf + cursor, (void *) &multicast_header, sizeof (multicast_header));
+                    cursor += sizeof (multicast_header);
+                    memcpy (out_buf + cursor, &payload_header, sizeof(payload_header));
                     break;
-                case OFPP_IN_PORT:
-                    cpu.d.reasonCode = UNICAST;
-                    cpu.d.dstPortOrGroup = in_port;
-                    break;
-                case OFPP_TABLE:
-                    cpu.d.reasonCode = UNICAST;
-                    cpu.d.dstPortOrGroup = 0;
-                    break;
-                default:
-                    cpu.d.reasonCode = UNICAST;
-                    cpu.d.dstPortOrGroup = *(uint32_t *) arg;
+//               case OFPP_IN_PORT:
+//                    cpu.d.reasonCode = UNICAST;
+//                    of_packet_out_in_port_get (packet_out, &in_port);
+//                    cpu.d.dstPortOrGroup = in_port;
+//                    break;
+//                case OFPP_TABLE:
+//                    cpu.d.reasonCode = UNICAST;
+//                    cpu.d.dstPortOrGroup = 0;
+//                    break;
+//                default:
+//                    cpu.d.reasonCode = UNICAST;
+//                    cpu.d.dstPortOrGroup = *(uint32_t *) arg;
             }
         } else {
             P4_LOG ("Unsupported: PACKET OUT can only do output");
             return INDIGO_ERROR_BAD_ACTION;
         }
-        
         free(arg);
-
-        if (num_actions) {
-            P4_LOG ("Unsupported: PACKET OUT can only do one action");
-        } else {
-            ++num_actions;
-        }
+        break;
     }
 
-    cpu_packet_swap_header (&cpu, TRUE);
-
-    // Fill out output buffer
-    static char out_buf[2000];
-    memset (out_buf, 0, sizeof (out_buf));
-
-    memcpy (out_buf, data.data, 12);
-
-    *(out_buf + 12) = 0x90;
-
-    memcpy (out_buf + 14, (void *) &cpu, sizeof (cpu));
-    memcpy (out_buf + sizeof(cpu) + 14, data.data + 14, data.bytes - 14);
+    memcpy (out_buf + cursor, data.data + 14, data.bytes - 14);
 
     // Send output buffer to interface
-    if (send (cpu_packet_sock_fd_get (), out_buf,
-              data.bytes + sizeof (cpu), 0) < 0) {
+    if (send (cpu_packet_sock_fd_get (), out_buf, data.bytes + cursor, 0) < 0) {
         P4_LOG ("packet out send failed");
     }
 
