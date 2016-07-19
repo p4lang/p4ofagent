@@ -41,6 +41,7 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
     of_octets_t data;
 
     of_packet_out_data_get(packet_out, &data);
+    of_packet_out_in_port_get (packet_out, &in_port);
 
     uint8_t *arg;
     uint8_t hdr_field;
@@ -53,7 +54,6 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
     // fabric header setup
     fabric_header_t fabric_header;
     memset (&fabric_header, 0, sizeof (fabric_header));
-    fabric_header.w.w0 = 0xa0;
 
     // only used for OFPP_ALL/OFPP_FLOOD
     fabric_header_multicast_t multicast_header;
@@ -71,7 +71,7 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
     int cursor = 12;
     static char out_buf[2000];
     memset (out_buf, 0, sizeof (out_buf));
-    memcpy (out_buf, data.data, 12);
+    memcpy (out_buf, data.data, cursor);
     *(out_buf + cursor) = 0x90;
     cursor += 2;
 
@@ -83,18 +83,20 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
             switch (*(uint32_t *) arg) {
                 case OFPP_FLOOD:
                 case OFPP_ALL:
-                    of_packet_out_in_port_get (packet_out, &in_port);
+                    fabric_header.w.w0 = 0x40;
+                    fabric_header.d.dstDevice = 127;
+                    multicast_header.w.w0 = 0x20;
                     multicast_header.d.ingressIfindex = in_port;
                     multicast_header.d.mcastGrp = AGENT_ETHERNET_FLOOD_MC_HDL;
-                    cpu_packet_swap_multicast (&multicast_header, FALSE);
                     cpu_packet_swap_fabric (&fabric_header, FALSE);
+                    cpu_packet_swap_multicast (&multicast_header, FALSE);
                     memcpy (out_buf + cursor, (void *) &fabric_header, sizeof (fabric_header));
                     cursor += sizeof (fabric_header);
                     memcpy (out_buf + cursor, (void *) &multicast_header, sizeof (multicast_header));
                     cursor += sizeof (multicast_header);
-                    memcpy (out_buf + cursor, &payload_header, sizeof(payload_header));
                     break;
 //               case OFPP_IN_PORT:
+//                    fabric_header.w.w0 = 0xa0;
 //                    cpu.d.reasonCode = UNICAST;
 //                    of_packet_out_in_port_get (packet_out, &in_port);
 //                    cpu.d.dstPortOrGroup = in_port;
@@ -114,6 +116,9 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
         free(arg);
         break;
     }
+
+    memcpy (out_buf + cursor, &payload_header, sizeof (payload_header));
+    cursor += sizeof (payload_header);
 
     memcpy (out_buf + cursor, data.data + 14, data.bytes - 14);
 
