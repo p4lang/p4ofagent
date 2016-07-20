@@ -122,7 +122,7 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
     memcpy (out_buf + cursor, data.data + 14, data.bytes - 14);
 
     // Send output buffer to interface
-    if (send (cpu_packet_sock_fd_get (), out_buf, data.bytes + cursor, 0) < 0) {
+    if (send (cpu_packet_sock_fd_get (), out_buf, data.bytes + cursor - 14, 0) < 0) {
         P4_LOG ("packet out send failed");
     }
 
