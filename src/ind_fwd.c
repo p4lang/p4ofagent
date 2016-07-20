@@ -90,24 +90,23 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
                     multicast_header.d.mcastGrp = AGENT_ETHERNET_FLOOD_MC_HDL;
                     cpu_packet_swap_fabric (&fabric_header, FALSE);
                     cpu_packet_swap_multicast (&multicast_header, FALSE);
-                    memcpy (out_buf + cursor, (void *) &fabric_header, sizeof (fabric_header));
+                    memcpy (out_buf + cursor, &fabric_header, sizeof (fabric_header));
                     cursor += sizeof (fabric_header);
-                    memcpy (out_buf + cursor, (void *) &multicast_header, sizeof (multicast_header));
+                    memcpy (out_buf + cursor, &multicast_header, sizeof (multicast_header));
                     cursor += sizeof (multicast_header);
                     break;
-//               case OFPP_IN_PORT:
-//                    fabric_header.w.w0 = 0xa0;
-//                    cpu.d.reasonCode = UNICAST;
-//                    of_packet_out_in_port_get (packet_out, &in_port);
-//                    cpu.d.dstPortOrGroup = in_port;
-//                    break;
-//                case OFPP_TABLE:
-//                    cpu.d.reasonCode = UNICAST;
-//                    cpu.d.dstPortOrGroup = 0;
-//                    break;
-//                default:
-//                    cpu.d.reasonCode = UNICAST;
-//                    cpu.d.dstPortOrGroup = *(uint32_t *) arg;
+                default:
+                    fabric_header.w.w0 = 0xa0;
+                    fabric_header.d.dstPortOrGroup = *(uint32_t *) arg;
+                    cpu_header.d.ingressPort = in_port;
+                    cpu_header.d.ingressIfindex = cpu_header.d.ingressPort + 1;
+                    cpu_packet_swap_fabric (&fabric_header, FALSE);
+                    cpu_packet_swap_cpu (&cpu_header, FALSE);
+                    memcpy (out_buf + cursor, &fabric_header, sizeof (fabric_header));
+                    cursor += sizeof (fabric_header);
+                    memcpy (out_buf + cursor, &cpu_header, sizeof (cpu_header));
+                    cursor += sizeof (cpu_header);
+                    break;
             }
         } else {
             P4_LOG ("Unsupported: PACKET OUT can only do output");
