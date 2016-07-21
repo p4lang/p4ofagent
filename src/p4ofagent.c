@@ -51,10 +51,23 @@ void packet_in_handler (int fd, void *unused, int rr, int wr, int err) {
     }
 
     // extract cpu header
-    cpu_header_t cpu;
-    memset (&cpu, 0, sizeof (cpu));
-    memcpy (&cpu, in_buf + 14, sizeof (cpu));
-    cpu_packet_swap_header (&cpu, TRUE);
+    int cursor = 14;
+    fabric_header_t fabric_header;
+    memset (&fabric_header, 0, sizeof (fabric_header));
+    fabric_header_cpu_t cpu_header;
+    memset (&cpu_header, 0, sizeof (cpu_header));
+    fabric_payload_header_t payload_header;
+    memset (&payload_header, 0, sizeof (payload_header));
+
+    memcpy (&fabric_header, in_buf + cursor, sizeof (fabric_header));
+    cursor += sizeof (fabric_header);
+    cpu_packet_swap_fabric (&fabric_header, TRUE);
+
+    memcpy (&cpu_header, in_buf + cursor, sizeof (cpu_header));
+    cursor += sizeof (cpu_header);
+    cpu_packet_swap_cpu (&cpu_header, TRUE);
+
+    memcpy (&payload_header, in_buf + cursor, sizeof (payload_header));
 
     // initialize packet in obj
     packet_in = of_packet_in_new (OF_VERSION_1_3); 
@@ -63,26 +76,29 @@ void packet_in_handler (int fd, void *unused, int rr, int wr, int err) {
     of_octets_t octets = { .data = out_buf, .bytes = ret };
 
     of_packet_in_buffer_id_set (packet_in, -1);
-    of_packet_in_total_len_set (packet_in, ret - sizeof(cpu));
-    of_packet_in_reason_set (packet_in, cpu.d.reasonCode >> 8); 
-    of_packet_in_table_id_set (packet_in, (uint8_t) cpu.d.reasonCode); 
+    of_packet_in_total_len_set (packet_in, ret - sizeof(cpu_header) - sizeof(fabric_header) - sizeof(payload_header));
+    of_packet_in_reason_set (packet_in, cpu_header.d.reasonCode >> 8); 
+    of_packet_in_table_id_set (packet_in, (uint8_t) cpu_header.d.reasonCode); 
     of_packet_in_cookie_set (packet_in, 0);
 
     // struct ofp_match fields
     of_match_t match;
     memset (&match, 0, sizeof (match));
     match.version = OF_VERSION_1_3;
-    match.fields.in_port = cpu.d.ingressPort;
+    match.fields.in_port = cpu_header.d.ingressPort;
     match.masks.in_port = 0xffffffff;
     if (of_packet_in_match_set (packet_in, &match)) {
         P4_LOG ("Error setting match");
     }
 
     // copy packet to output buffer, skipping cpu header
+    cursor = 12;
     memset (out_buf, 0, sizeof (out_buf));
-    memcpy (out_buf, in_buf, 12);
-    memcpy (out_buf + 12, in_buf + 14 + sizeof (cpu) - 2,
-            ret - (14 + sizeof (cpu) - 2));
+    memcpy (out_buf, in_buf, cursor);
+    memcpy (out_buf + cursor, &payload_header, sizeof (payload_header));
+    cursor += sizeof (payload_header);
+    memcpy (out_buf + cursor, in_buf + cursor + sizeof (fabric_header) + sizeof (cpu_header) + sizeof (payload_header),
+            ret - (sizeof(fabric_header) + sizeof (cpu_header) + sizeof(payload_header)));
 
     // send to controller
     if (!of_packet_in_data_set (packet_in, &octets)) {
