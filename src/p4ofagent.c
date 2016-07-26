@@ -163,14 +163,14 @@ void p4ofagent_init (bool ipv6, char *ctl_ip) {
             // Connect to IPV4 controller
             proto_p.header.protocol = INDIGO_CXN_PROTO_TCP_OVER_IPV4;
             proto_p.tcp_over_ipv4.protocol = INDIGO_CXN_PROTO_TCP_OVER_IPV4;
-            proto_p.tcp_over_ipv4.controller_port = 6633;
+            proto_p.tcp_over_ipv4.controller_port = 6653;
 
             sprintf (proto_p.tcp_over_ipv4.controller_ip, "%s", ctl_ip);
         } else { 
             // Connect to IPV6 controller
             proto_p.header.protocol = INDIGO_CXN_PROTO_TCP_OVER_IPV6;
             proto_p.tcp_over_ipv6.protocol = INDIGO_CXN_PROTO_TCP_OVER_IPV6;
-            proto_p.tcp_over_ipv6.controller_port = 6633;
+            proto_p.tcp_over_ipv6.controller_port = 6653;
 
             sprintf (proto_p.tcp_over_ipv6.controller_ip, "%s", ctl_ip);
         }
@@ -179,29 +179,29 @@ void p4ofagent_init (bool ipv6, char *ctl_ip) {
             P4_LOG ("Failed to add controller.\n");
             exit(1);
         }
-    }
+    } else {
+        // Listen -- for testing
+        indigo_controller_id_t listen_c_id;
 
-    // Listen -- for testing
-    indigo_controller_id_t listen_c_id;
+        indigo_cxn_config_params_t listen_conf_p = {
+            .version = OF_VERSION_1_3,
+            .listen = 1
+        };
 
-    indigo_cxn_config_params_t listen_conf_p = {
-        .version = OF_VERSION_1_3,
-        .listen = 1
-    };
+        indigo_cxn_protocol_params_t listen_proto_p = {
+            .header.protocol = INDIGO_CXN_PROTO_TCP_OVER_IPV4,
+            .tcp_over_ipv4.protocol = INDIGO_CXN_PROTO_TCP_OVER_IPV4,
+            .tcp_over_ipv4.controller_port = 6653
+        };
 
-    indigo_cxn_protocol_params_t listen_proto_p = {
-        .header.protocol = INDIGO_CXN_PROTO_TCP_OVER_IPV4,
-        .tcp_over_ipv4.protocol = INDIGO_CXN_PROTO_TCP_OVER_IPV4,
-        .tcp_over_ipv4.controller_port = 6653
-    };
+        sprintf (listen_proto_p.tcp_over_ipv4.controller_ip, "0.0.0.0");
 
-    sprintf (listen_proto_p.tcp_over_ipv4.controller_ip, "0.0.0.0");
-
-    if (INDIGO_FAILURE (indigo_controller_add (&listen_proto_p,
-                                               &listen_conf_p,
-                                               &listen_c_id))) {
-        P4_LOG ("Failed to add controller.\n");
-        exit(1);
+        if (INDIGO_FAILURE (indigo_controller_add (&listen_proto_p,
+                                                   &listen_conf_p,
+                                                   &listen_c_id))) {
+            P4_LOG ("Failed to add controller.\n");
+            exit(1);
+        }
     }
 
 #ifdef _BMV2_
