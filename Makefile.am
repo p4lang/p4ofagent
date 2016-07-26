@@ -45,3 +45,5 @@ indigo-lib:
 
 p4ofagent: indigo-lib all 
 	ar -M <libp4ofagent.mri
+
+.NOTPARALLEL:
