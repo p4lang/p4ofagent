@@ -34,7 +34,7 @@ To build, run
 This generates a Makefile with target `p4ofagent` to be required by a
 [p4factory](https://github.com/p4lang/p4factory) target Makefile.
 
-To use with bmv2, the P4 Openflow Agent needs to be installed. Simple follow the
+For use with bmv2, the P4 Openflow Agent needs to be installed. Simply follow the
 above instructions for building, but with CPPFLAGS=-D_BMV2_ exported in your environment.
 Then run `make p4ofagent` and `make install`.
 
