@@ -214,11 +214,7 @@ void p4ofagent_init (bool ipv6, char *ctl_ip) {
     }
 #endif // _BMV2_
 
-#ifdef _BMV2_
     if  (p4_pd_client_init (&P4_PD_SESSION)) {
-#else
-    if  (p4_pd_client_init (&P4_PD_SESSION, 5)) {
-#endif
         P4_LOG ("Could not start PD session for openflow\n");
     }
 
