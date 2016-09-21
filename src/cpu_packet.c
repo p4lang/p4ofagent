@@ -57,11 +57,13 @@ cpu_packet_swap_cpu(fabric_header_cpu_t *cpu_header, bool network_to_host) {
         cpu_header->w.w2 = ntohs(cpu_header->w.w2);
         cpu_header->w.w3 = ntohs(cpu_header->w.w3);
         cpu_header->w.w4 = ntohs(cpu_header->w.w4);
+        cpu_header->w.w5 = ntohs(cpu_header->w.w5);
     } else {
         cpu_header->w.w1 = htons(cpu_header->w.w1);
         cpu_header->w.w2 = htons(cpu_header->w.w2);
         cpu_header->w.w3 = htons(cpu_header->w.w3);
         cpu_header->w.w4 = htons(cpu_header->w.w4);
+        cpu_header->w.w5 = htons(cpu_header->w.w5);
     }
 }
 

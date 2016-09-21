@@ -54,13 +54,13 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
     // fabric header setup
     fabric_header_t fabric_header;
     memset (&fabric_header, 0, sizeof (fabric_header));
+    fabric_header.w.w0 = 0xa0;
 
-    // only used for OFPP_ALL/OFPP_FLOOD
-    fabric_header_multicast_t multicast_header;
-    memset (&multicast_header, 0, sizeof(multicast_header));
-
-    // only used for OFPP_IN_PORT/unicasting
     fabric_header_cpu_t cpu_header;
+    memset (&cpu_header, 0, sizeof (cpu_header));
+
+    cpu_header.d.ingressPort = in_port;
+    cpu_header.d.ingressIfindex = cpu_header.d.ingressPort + 1;
 
     // just an ethertype at the moment
     fabric_payload_header_t payload_header;
@@ -83,29 +83,10 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
             switch (*(uint32_t *) arg) {
                 case OFPP_FLOOD:
                 case OFPP_ALL:
-                    fabric_header.w.w0 = 0x40;
-                    fabric_header.d.dstDevice = 127;
-                    multicast_header.w.w0 = 0x20;
-                    multicast_header.d.ingressIfindex = in_port;
-                    multicast_header.d.mcastGrp = AGENT_ETHERNET_FLOOD_MC_HDL;
-                    cpu_packet_swap_fabric (&fabric_header, FALSE);
-                    cpu_packet_swap_multicast (&multicast_header, FALSE);
-                    memcpy (out_buf + cursor, &fabric_header, sizeof (fabric_header));
-                    cursor += sizeof (fabric_header);
-                    memcpy (out_buf + cursor, &multicast_header, sizeof (multicast_header));
-                    cursor += sizeof (multicast_header);
+                    cpu_header.d.mcastGrp = AGENT_ETHERNET_FLOOD_MC_HDL;
                     break;
                 default:
-                    fabric_header.w.w0 = 0xa0;
                     fabric_header.d.dstPortOrGroup = *(uint32_t *) arg;
-                    cpu_header.d.ingressPort = in_port;
-                    cpu_header.d.ingressIfindex = cpu_header.d.ingressPort + 1;
-                    cpu_packet_swap_fabric (&fabric_header, FALSE);
-                    cpu_packet_swap_cpu (&cpu_header, FALSE);
-                    memcpy (out_buf + cursor, &fabric_header, sizeof (fabric_header));
-                    cursor += sizeof (fabric_header);
-                    memcpy (out_buf + cursor, &cpu_header, sizeof (cpu_header));
-                    cursor += sizeof (cpu_header);
                     break;
             }
         } else {
@@ -116,6 +97,13 @@ indigo_fwd_packet_out (of_packet_out_t *packet_out) {
         break;
     }
 
+    cpu_packet_swap_fabric (&fabric_header, FALSE);
+    cpu_packet_swap_cpu (&cpu_header, FALSE);
+
+    memcpy (out_buf + cursor, &fabric_header, sizeof (fabric_header));
+    cursor += sizeof (fabric_header);
+    memcpy (out_buf + cursor, &cpu_header, sizeof (cpu_header));
+    cursor += sizeof (cpu_header);
     memcpy (out_buf + cursor, &payload_header, sizeof (payload_header));
     cursor += sizeof (payload_header);
 

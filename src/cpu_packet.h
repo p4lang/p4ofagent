@@ -90,6 +90,7 @@ typedef struct __attribute__((__packed__)) fabric_header_cpu_ {
             uint16_t ingressBd      : 16;
 
             uint16_t reasonCode  : 16;
+            uint16_t mcastGrp    : 16;
         } d;
         struct __attribute__((__packed__)) {
             uint8_t w0;
@@ -97,6 +98,7 @@ typedef struct __attribute__((__packed__)) fabric_header_cpu_ {
             uint16_t w2;
             uint16_t w3;
             uint16_t w4;
+            uint16_t w5;
         } w;
     };
 } fabric_header_cpu_t;
