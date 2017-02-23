@@ -37,6 +37,9 @@ This generates a Makefile with target `p4ofagent` to be required by a
 For use with BMV2, the P4 Openflow Agent needs to be installed. First install
 [BMV2](https://github.com/p4lang/behavioral-model), then follow the
 above instructions for building, but with CPPFLAGS=-D_BMV2_ exported in your environment.
+Note that when running `./configure` for bmv2, you need to provide the `--with-pdfixed`
+option, as `p4ofagent` requires the PD library.
+
 Then run `make p4ofagent` and `make install`.
 
 ## Features
