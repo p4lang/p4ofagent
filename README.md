@@ -1,4 +1,9 @@
 # P4 Openflow Agent
+
+***This repository is no longer maintained. If you want to integrate a P4
+   dataplane with an SDN controller, you can take a look at the
+   [ONOS](https://opennetworking.org/onos/) project.***
+
 This is the controller-facing layer of a P4 agnostic Openflow 1.3 Agent.
 
     +-----------------------------------+
